@@ -1,0 +1,8 @@
+{
+  "name": "ID Print Studio",
+  "description": "Premium AI-powered web application for editing, enhancing, arranging, and printing ID cards, passport photos, documents, and certificates with professional print accuracy.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
