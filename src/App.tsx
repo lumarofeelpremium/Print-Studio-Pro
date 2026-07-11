@@ -18,12 +18,7 @@ import { CARD_TEMPLATES, DEFAULT_PRINT_SETTINGS, DEFAULT_ADJUSTMENTS } from './c
 import { PrintProject, CardTemplate } from './types';
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<string>(() => {
-    if (typeof window !== 'undefined' && window.location.hash === '#print') {
-      return 'editor';
-    }
-    return 'dashboard';
-  });
+  const [currentTab, setCurrentTab] = useState<string>('dashboard');
   const [activeProject, setActiveProject] = useState<PrintProject | null>(null);
   const [recentProjects, setRecentProjects] = useState<PrintProject[]>([]);
   const [queueCount, setQueueCount] = useState(0);

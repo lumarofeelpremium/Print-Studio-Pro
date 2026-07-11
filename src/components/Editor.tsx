@@ -66,32 +66,6 @@ export default function Editor({ project: initialProject, onBack, onSave }: Edit
   const [aiFeedback, setAiFeedback] = useState<string>('');
   const [isSharingModalOpen, setIsSharingModalOpen] = useState<boolean>(false);
   const [showPrintConfirmModal, setShowPrintConfirmModal] = useState<boolean>(false);
-  const [isInIframe, setIsInIframe] = useState<boolean>(false);
-
-  useEffect(() => {
-    try {
-      setIsInIframe(window.self !== window.top);
-    } catch (e) {
-      setIsInIframe(true);
-    }
-  }, []);
-
-  // Auto-save changes to localStorage to preserve state on cross-tab print redirection
-  useEffect(() => {
-    try {
-      localStorage.setItem('id_print_studio_active_project', JSON.stringify(project));
-    } catch (e) {
-      console.warn('Active project auto-save failed in Editor:', e);
-    }
-  }, [project]);
-
-  // Handle URL hash-based print sheet activation
-  useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash === '#print') {
-      setEditorMode('sheet');
-      setShowPrintConfirmModal(true);
-    }
-  }, []);
   
   // Sharing Settings
   const [sharePassword, setSharePassword] = useState<string>('');
@@ -2752,7 +2726,6 @@ export default function Editor({ project: initialProject, onBack, onSave }: Edit
                       </div>
                     </div>
 
-                    {/* Guidelines Checklist */}
                     <div className="bg-slate-950 p-3.5 rounded-2xl border border-slate-850 space-y-2">
                       <span className="text-[9px] font-bold text-indigo-400 block uppercase tracking-wider">Browser Printing Best Practices:</span>
                       <ul className="list-disc list-inside space-y-1 text-slate-400 text-[11px] leading-relaxed">
@@ -2761,23 +2734,10 @@ export default function Editor({ project: initialProject, onBack, onSave }: Edit
                         <li>Verify printer paper is loaded and matched.</li>
                       </ul>
                     </div>
-
-                    {/* IFrame Sandbox Print Warning Card */}
-                    {isInIframe && (
-                      <div className="bg-amber-950/40 border border-amber-900/60 p-3.5 rounded-2xl space-y-2">
-                        <span className="text-[10px] font-bold text-amber-400 block uppercase tracking-wider">⚠️ Browser Frame Warning / प्रिंटिंग चेतावनी:</span>
-                        <p className="text-slate-300 text-[11px] leading-relaxed">
-                          Aap abhi is app ko AI Studio preview (iframe) ke andar dekh rahe hain. Google Chrome aur dusre browsers security reasons se iframe ke andar direct Print window (window.print) block kar deete hain.
-                        </p>
-                        <p className="text-amber-300 text-[11px] font-medium leading-relaxed">
-                          Niche diye gaye <b>"Open in New Tab &amp; Print"</b> button par click karein. Yeh aapke poore project (uploaded photos aur adjustments ke sath) ko naye tab me khol dega, jahan se aap aasaani se Print button daba kar print kar sakenge!
-                        </p>
-                      </div>
-                    )}
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-800">
+                <div className="flex gap-3 pt-4 border-t border-slate-800">
                   <button
                     type="button"
                     onClick={() => setShowPrintConfirmModal(false)}
@@ -2785,29 +2745,14 @@ export default function Editor({ project: initialProject, onBack, onSave }: Edit
                   >
                     Adjust Settings
                   </button>
-                  {isInIframe ? (
-                    <a
-                      href={`${window.location.origin}${window.location.pathname}#print`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl transition text-center text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-600/15"
-                      onClick={() => {
-                        setShowPrintConfirmModal(false);
-                      }}
-                    >
-                      <Share2 className="w-4 h-4" />
-                      Open in New Tab &amp; Print
-                    </a>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={executePrint}
-                      className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl transition text-center text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-600/15"
-                    >
-                      <Printer className="w-4 h-4" />
-                      Print Now
-                    </button>
-                  )}
+                  <button
+                    type="button"
+                    onClick={executePrint}
+                    className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-semibold rounded-xl transition text-center text-xs flex items-center justify-center gap-1.5 shadow-lg shadow-indigo-600/15"
+                  >
+                    <Printer className="w-4 h-4" />
+                    Print Now
+                  </button>
                 </div>
               </div>
 
